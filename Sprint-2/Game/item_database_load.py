@@ -150,5 +150,25 @@ rows = cur.fetchall()
 cur.executemany("INSERT INTO wave_drop_three_items(name, description, identifer, icon, hp_buff, atk_buff, def_buff, duration, cooldown, price) VALUES (?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL) ", rows)
 conn.commit()
 
+cur.execute("""CREATE TABLE item_limits(
+            item_name TEXT NOT NULL,
+            max_quantity INT NOT NULL,
+
+            PRIMARY KEY(item_name)
+            FOREIGN KEY(item_name) REFERENCES game_items(name)
+            )
+            """)
+
+cur.execute("""INSERT INTO item_limits (item_name, max_quantity)
+            SELECT name,
+                CASE
+                    WHEN identifer LIKE '%EQ%' 
+                        OR identifer LIKE '%FM%' 
+                        OR identifer LIKE '%BM%' THEN 1
+                    ELSE 20
+                END
+            FROM game_items 
+            """)
+conn.commit()
 conn.close()
 
