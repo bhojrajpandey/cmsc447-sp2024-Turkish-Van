@@ -1,10 +1,91 @@
+mainMenu.html
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Main Menu</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+    button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<h1>Welcome to the Game</h1>
+<button onclick="newGame()">New Game</button>
+<button onclick="loadGame()">Load Game</button>
+<button onclick="viewLeaderboard()">View Leaderboard</button>
+
+<script>
+// Detailed JavaScript functions for game actions
+function newGame() {
+    // Send a request to your server to reset the player's data
+    fetch('/reset-game', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: 'user123' }), // Include the user ID or other identifier
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('New game started:', data);
+        // Redirect to game page or initialize game state in the frontend
+        window.location.href = '/game.html';
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function loadGame() {
+    // Example: Fetch the player's saved game state
+    fetch('/load-game?userId=user123') // Include query parameters as needed
+    .then(response => response.json())
+    .then(data => {
+        console.log('Game loaded:', data);
+        // Use 'data' to set game state
+        // This might involve setting variables, updating the UI, etc.
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+function viewLeaderboard() {
+    // Example: Fetch leaderboard data and then display it
+    fetch('/leaderboard-data')
+    .then(response => response.json())
+    .then(data => {
+        console.log('Leaderboard:', data);
+        // Process and display leaderboard data
+        // This might involve dynamically creating HTML to show the leaderboard
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+
+</script>
+
+</body>
 </html>
+
+
+
